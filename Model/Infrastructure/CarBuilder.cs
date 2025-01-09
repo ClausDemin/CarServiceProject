@@ -61,7 +61,7 @@ namespace CarServiceProject.Model.Infrastructure
 
             while (isBroken == false)
             {
-                var index = UserUtils.Next(0, _parts.Count);
+                var index = UserUtils.GetNextInt(0, _parts.Count);
                 var part = _parts[index];
 
                 if (part.State == PartState.WorkingProperly)

@@ -39,7 +39,7 @@ namespace CarServiceProject.Model.Infrastructure
                 }
             }
 
-            var brokenPartsCount = UserUtils.Next(minBrokenPartsCount, maxPartsCount);
+            var brokenPartsCount = UserUtils.GetNextInt(minBrokenPartsCount, maxPartsCount);
 
             _builder.BrokeRandomParts(brokenPartsCount);
 

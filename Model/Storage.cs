@@ -39,17 +39,17 @@ namespace CarServiceProject.Model
             PartsCountChanged.Invoke();
         }
 
-        public float GetPrice(PartType type) 
-        { 
+        public float GetPrice(PartType type)
+        {
             return _partsFactory.GetPrice(type);
         }
 
-        public int GetAmount(PartType type) 
-        { 
+        public int GetAmount(PartType type)
+        {
             var part = _partsFactory.Create(type);
 
-            if (_parts.TryGetValue(part, out var count)) 
-            { 
+            if (_parts.TryGetValue(part, out var count))
+            {
                 return count;
             }
 
@@ -60,14 +60,12 @@ namespace CarServiceProject.Model
         {
             var part = _partsFactory.Create(type);
 
-            if (_parts.ContainsKey(part))
+            if (_parts.ContainsKey(part) == false)
             {
-                _parts[part] += count;
+                _parts[part] = 0;
             }
-            else
-            {
-                _parts[part] = count;
-            }
+
+            _parts[part] += count;
         }
 
         private void Remove(CarPart? part)
@@ -92,7 +90,7 @@ namespace CarServiceProject.Model
         {
             foreach (var partType in GetPartTypes())
             {
-                var count = UserUtils.Next(minPartsCount, maxPartsCount);
+                var count = UserUtils.GetNextInt(minPartsCount, maxPartsCount);
                 var part = _partsFactory.Create(partType);
 
                 _parts[part] = count;

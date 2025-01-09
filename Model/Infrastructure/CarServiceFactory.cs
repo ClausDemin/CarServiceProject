@@ -35,7 +35,7 @@ namespace CarServiceProject.Model.Infrastructure
         { 
             var clients = new Queue<Car>();
 
-            var clientsCount = UserUtils.Next(minClientsCount, maxClientsCount);
+            var clientsCount = UserUtils.GetNextInt(minClientsCount, maxClientsCount);
 
             for (int i = 0; i < clientsCount; i++) 
             {

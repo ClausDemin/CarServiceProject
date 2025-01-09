@@ -14,8 +14,14 @@ namespace CarServiceProject.View.SwitchableMenuView
 
         private MenuItem? _current;
         private int _currentIndex;
+        private Dictionary<CursorMovement, int> _moveDirection =
+            new Dictionary<CursorMovement, int>()
+            {
+                { CursorMovement.Up, -1},
+                { CursorMovement.Down, 1},
+            };
 
-        public SwitchableMenu(Point position, char cursor = '>') 
+        public SwitchableMenu(Point position, char cursor = '>')
         {
             _cursor = new TableColumn(position, 0);
             _names = new TableColumn(position, 1);
@@ -26,13 +32,13 @@ namespace CarServiceProject.View.SwitchableMenuView
         }
 
         public char Cursor { get; set; }
-        public Point Position { get ; set; }
+        public Point Position { get; set; }
         public int Width => GetWidth();
         public int Height => GetHeight();
         public int ScreenWidth => GetScreenWidth();
         public int Current => _currentIndex;
 
-        public void Add(MenuItem item) 
+        public void Add(MenuItem item)
         {
             _items.Add(item);
             item.SetColumn(_names);
@@ -46,35 +52,35 @@ namespace CarServiceProject.View.SwitchableMenuView
             }
         }
 
-        public void Click() 
+        public void Click()
         {
-            if (_current != null) 
-            { 
+            if (_current != null)
+            {
                 _current.Click();
             }
         }
 
-        public void Draw() 
+        public void Draw()
         {
-            if (_items.Count > 0) 
-            { 
+            if (_items.Count > 0)
+            {
                 _cursor.Draw();
                 _names.Draw();
             }
         }
 
-        public void Clear() 
-        { 
+        public void Clear()
+        {
             _names.Clear();
             _cursor.Clear();
         }
 
-        public void MoveCursor(CursorMovement direction) 
+        public void MoveCursor(CursorMovement direction)
         {
-            if (IsCursorInBounds(_currentIndex, direction)) 
+            if (IsCursorInBounds(_currentIndex, direction))
             {
                 _cursor.SetValue(_currentIndex, string.Empty);
-                _currentIndex += (int) direction;
+                _currentIndex += _moveDirection[direction]; ;
                 _cursor.SetValue(_currentIndex, Cursor.ToString());
                 _current = _items[_currentIndex];
             }
@@ -93,24 +99,26 @@ namespace CarServiceProject.View.SwitchableMenuView
             }
         }
 
-        private bool IsCursorInBounds(int index, CursorMovement direction) 
-        { 
-            var nextIndex = index + (int) direction;
+        private bool IsCursorInBounds(int index, CursorMovement direction)
+        {
+            var moveDirection = _moveDirection[direction];
+
+            var nextIndex = index + moveDirection;
 
             return nextIndex >= 0 && nextIndex < _items.Count;
         }
 
-        private int GetWidth() 
-        { 
+        private int GetWidth()
+        {
             return _cursor.Width + _names.Width;
         }
 
-        private int GetScreenWidth() 
-        { 
+        private int GetScreenWidth()
+        {
             return _cursor.ScreenWidth + _names.ScreenWidth;
         }
 
-        private int GetHeight() 
+        private int GetHeight()
         {
             return _cursor.Height;
         }
